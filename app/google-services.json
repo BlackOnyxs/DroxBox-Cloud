@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "114604690791",
+    "project_id": "droxbox-cloud",
+    "storage_bucket": "droxbox-cloud.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114604690791:android:57dcfdc016fbbf986333c2",
+        "android_client_info": {
+          "package_name": "com.example.droxbox"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "114604690791-2o0b5u5jqj607no5oqd5rpece82qgdco.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.droxbox",
+            "certificate_hash": "d1962a9e2c878bf0de2749de05947c507e49a2ff"
+          }
+        },
+        {
+          "client_id": "114604690791-78bkea8n0bk89ikudje7q9drlh03esd6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkLaHC41viOKI9wGG8HGQwxrutbvPs_KQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "114604690791-78bkea8n0bk89ikudje7q9drlh03esd6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
