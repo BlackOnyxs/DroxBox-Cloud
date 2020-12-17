@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.droxbox.AddFileFragment;
 import com.example.droxbox.R;
+import com.example.droxbox.fileDetailModule.FileDetailFragment;
 import com.example.droxbox.pojo.File;
 import com.example.droxbox.pojo.User;
 import com.example.droxbox.singletons.FirestoreAPI;
@@ -143,7 +144,7 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onClickListener(File file) {
-        Log.i("RepeatData", file.toString());
+        new FileDetailFragment(file).show(getSupportFragmentManager(), "");
     }
 
     @Override

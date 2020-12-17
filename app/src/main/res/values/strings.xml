@@ -34,4 +34,16 @@
     <string name="tv_upload_file">Upload File</string>
     <string name="upload_success_message">Your file has already been uploaded.</string>
     <string name="upload_error_message">Could not upload your file.</string>
+    <string name="tv_fileName">Name:</string>
+    <string name="tv_createdDate">Created Date:</string>
+    <string name="tv_lastModified">Last Modified:</string>
+    <string name="name_required_message">The name is required.</string>
+    <string name="file_exist_message">A file with that name already exists</string>
+    <string name="picture_required_message">Select one file pls</string>
+    <string name="package_name">com.example.droxbox</string>
+    <string name="dialog_upload_btn">Upload</string>
+    <string name="dialog_cancel_btn">Cancel</string>
+    <string name="firestore_succes_update">Success Updated.</string>
+    <string name="firestore_error_update">Error Updated.</string>
+    <string name="dialog_ok_btn">Ok</string>
 </resources>
