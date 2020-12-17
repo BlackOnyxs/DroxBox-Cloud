@@ -1,4 +1,4 @@
-package com.example.droxbox;
+package com.example.droxbox.loginModule;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -12,14 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.droxbox.pojo.User;
+import com.example.droxbox.homeModule.HomeActivity;
+import com.example.droxbox.R;
 import com.example.droxbox.singletons.AuthAPI;
 import com.example.droxbox.singletons.FirestoreAPI;
 import com.example.droxbox.singletons.UserSingleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 
 import java.util.ArrayList;

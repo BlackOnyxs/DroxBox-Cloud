@@ -1,6 +1,7 @@
 package com.example.droxbox.pojo;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class User {
 
@@ -48,6 +49,23 @@ public class User {
 
     public void setFiles(ArrayList<File> files) {
         this.files = files;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(uid, user.uid) &&
+                Objects.equals(fullName, user.fullName) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(username, user.username) &&
+                Objects.equals(files, user.files);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, fullName, email, username, files);
     }
 
     @Override
