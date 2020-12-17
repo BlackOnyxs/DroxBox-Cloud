@@ -92,9 +92,8 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity())
-//                .setTitle("Upload File")
-                .setPositiveButton("Upload", null)
-                .setNegativeButton("Cancel", null);
+                .setPositiveButton(getContext().getString(R.string.dialog_upload_btn), null)
+                .setNegativeButton(getContext().getString(R.string.dialog_cancel_btn), null);
 
         View view = getActivity().getLayoutInflater().inflate(R.layout.fragment_add_file, null);
         builder.setView(view);
@@ -130,9 +129,7 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
                 public void onClick(View v) {
                     if ( type.equals(GALLERY_TYPE) ) {
                         fromGallery();
-//                        checkPermissionToApp(Manifest.permission.READ_EXTERNAL_STORAGE, RP_STORAGE);
                     }else if ( type.equals(CAMERA_TYPE) ) {
-//                        fromCamera();
                         checkPermissionToApp(Manifest.permission.CAMERA, RP_CAMERA);
                     }
                 }
@@ -201,7 +198,7 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
 
             if ( photoFile != null) {
                 Uri photoUri = FileProvider.getUriForFile(getContext(),
-                        "com.example.droxbox", photoFile);
+                        getString(R.string.package_name), photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
                 startActivityForResult(intent, RC_CAMERA);
             }
@@ -231,13 +228,20 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
                         .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                Uri downloadUri = taskSnapshot.getUploadSessionUri();
-                                savePhotoUri(downloadUri);
+                                 taskSnapshot.getStorage().getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                     @Override
+                                     public void onSuccess(Uri uri) {
+                                         if ( uri != null ) {
+                                             savePhotoUri(uri);
+                                         }
+                                     }
+                                 });
+
                             }
                         });
             }else {
                 uploadPB.setVisibility(View.GONE);
-                Toast.makeText(getActivity(), "Select one file pls", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), getContext().getString(R.string.picture_required_message), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -246,7 +250,7 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
         boolean isValid = true;
 
         if ( etFileName.getText().toString().trim().isEmpty() ) {
-            etFileName.setError("The name is required.");
+            etFileName.setError(getActivity().getString(R.string.name_required_message));
         }else{
             fileName = etFileName.getText().toString().trim();
             if ( mUserSingleton.getUser().getFiles() != null ) {
@@ -255,7 +259,7 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
                             mUserSingleton.getUser().getFiles()) {
 
                         if ( file.getName().equals(fileName) ) {
-                            etFileName.setError("A file with that name already exists");
+                            etFileName.setError(getString(R.string.file_exist_message));
                             isValid = false;
                         }
                     }
