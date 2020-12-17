@@ -25,4 +25,13 @@
     <string name="tv_sign_in">Are you already registered?</string>
     <string name="tv_sigIn_action"><u>Login</u></string>
     <string name="tv_register_title">Register</string>
+    <string name="home_title">Your Files</string>
+    <string name="home_tvEmpty">You do not have files yet :c</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hint_et_fileName">Enter file name</string>
+    <string name="tv_choose_file">Choose the file</string>
+    <string name="tv_upload_file">Upload File</string>
+    <string name="upload_success_message">Your file has already been uploaded.</string>
+    <string name="upload_error_message">Could not upload your file.</string>
 </resources>
