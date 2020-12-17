@@ -6,6 +6,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ import com.example.droxbox.singletons.AuthAPI;
 import com.example.droxbox.singletons.FirestoreAPI;
 import com.example.droxbox.singletons.UserSingleton;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.firestore.DocumentReference;
@@ -43,7 +46,7 @@ public class RegisterActivity extends AppCompatActivity {
         EditText etPassword = findViewById(R.id.et_password);
         EditText etFullName = findViewById(R.id.et_fullName);
 
-        Button btnSubmit = findViewById(R.id.btn_login);
+        Button btnSubmit = findViewById(R.id.btn_signUp);
         mView = findViewById(R.id.login_view);
         TextView tvSignIn = findViewById(R.id.tv_register_action);
 
@@ -52,11 +55,8 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if ( checkCredentials(etEmail, etPassword, etFullName).size() == 3 ) {
                    ArrayList<String> credentials = checkCredentials(etEmail, etPassword, etFullName);
-                   if ( signUp(credentials.get(0), credentials.get(1), credentials.get(2)) ) {
-                       Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
-                       startActivity(intent);
-                       finish();
-                   }
+                    signUp(credentials.get(0), credentials.get(1), credentials.get(2));
+
                 }
             }
         });
@@ -103,38 +103,46 @@ public class RegisterActivity extends AppCompatActivity {
         }
 
         if ( !email.isEmpty() && !password.isEmpty() && !fullName.isEmpty() ){
+            credentials.add(fullName);
             credentials.add(email);
             credentials.add(password);
-            credentials.add(fullName);
         }
 
         return credentials;
     }
 
-    private boolean signUp(String fullName, String email, String password){
+    private void signUp(String fullName, String email, String password){
         if ( mAuthAPI != null && mFirestoreAPI != null ) {
-            mAuthAPI.getFirebaseAuth().createUserWithEmailAndPassword(email, password).
-                    addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            mAuthAPI.getFirebaseAuth().createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                 @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if ( task.isSuccessful() ) {
-                        mAuthAPI.getCurrentUser().setFullName(fullName);
-                        mFirestoreAPI.getUserCollection().add(mAuthAPI.getCurrentUser())
-                                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                                        if ( task.getResult() != null ){
-                                            mUserSingleton.getUser().setUid(mAuthAPI.getCurrentUser().getUid());
-                                        }else{
-                                            Toast.makeText(getApplicationContext(),getApplicationContext().getString( R.string.login_error_message), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }
-                                });
-                    }
+                public void onSuccess(AuthResult authResult) {
+                    mAuthAPI.getCurrentUser().setFullName(fullName);
+                    mFirestoreAPI.getUserCollection().document(mAuthAPI.getCurrentUser()
+                            .getUid()).set(mAuthAPI.getCurrentUser())
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mUserSingleton.setUser(mAuthAPI.getCurrentUser());
+                                    Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             });
+
         }
-        return mUserSingleton.getUser().getUid() != null;
     }
 
 

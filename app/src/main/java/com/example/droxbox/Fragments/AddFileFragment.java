@@ -1,4 +1,4 @@
-package com.example.droxbox;
+package com.example.droxbox.Fragments;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.droxbox.R;
 import com.example.droxbox.homeModule.HomeActivity;
 import com.example.droxbox.pojo.File;
 import com.example.droxbox.singletons.FirestoreAPI;
@@ -40,13 +41,11 @@ import com.example.droxbox.singletons.UserSingleton;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
@@ -61,10 +60,6 @@ public class AddFileFragment extends DialogFragment implements DialogInterface.O
     private static final int RP_CAMERA = 121;
     private static final int RP_STORAGE = 122;
 
-    private static final String IMAGE_DIRECTORY = "/DroxBox";
-    private static final String MY_PHOTO = "my_file";
-
-    private static final String PATH_FILE = "files";
 
     private static final String CAMERA_TYPE = "camera";
     private static final String GALLERY_TYPE = "gallery";

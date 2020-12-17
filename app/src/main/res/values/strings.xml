@@ -46,4 +46,10 @@
     <string name="firestore_succes_update">Success Updated.</string>
     <string name="firestore_error_update">Error Updated.</string>
     <string name="dialog_ok_btn">Ok</string>
+    <string name="menu_logout">Logout</string>
+    <string name="menu_aboutUs">About Us</string>
+    <string name="common_offline">You are offline</string>
+    <string name="common_try_again"><u>Try Again</u></string>
+    <string name="offline_message">Offline try again</string>
+    <string name="firestore_success_deleted">Success Deleted</string>
 </resources>

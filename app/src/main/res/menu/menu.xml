@@ -1,0 +1,16 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.droxbox.ScrollingActivity">
+
+    <item
+        android:id="@+id/menu_logout"
+        android:title="@string/menu_logout"
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/menu_aboutUs"
+        android:title="@string/menu_aboutUs"
+        app:showAsAction="never"
+        />
+</menu>

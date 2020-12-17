@@ -1,4 +1,4 @@
-package com.example.droxbox.fileDetailModule;
+package com.example.droxbox.Fragments;
 
 import android.app.Dialog;
 import android.content.DialogInterface;

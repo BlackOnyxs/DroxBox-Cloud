@@ -1,14 +1,21 @@
 package com.example.droxbox.homeModule;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -16,13 +23,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.droxbox.AddFileFragment;
+import com.example.droxbox.Fragments.AboutUsFragment;
+import com.example.droxbox.Fragments.AddFileFragment;
 import com.example.droxbox.R;
-import com.example.droxbox.fileDetailModule.FileDetailFragment;
+import com.example.droxbox.Fragments.FileDetailFragment;
+import com.example.droxbox.ScrollingActivity;
 import com.example.droxbox.pojo.File;
 import com.example.droxbox.pojo.User;
+import com.example.droxbox.singletons.AuthAPI;
 import com.example.droxbox.singletons.FirestoreAPI;
+import com.example.droxbox.singletons.StorageAPI;
 import com.example.droxbox.singletons.UserSingleton;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
@@ -37,6 +49,8 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     private FirestoreAPI mFirestoreAPI;
     private UserSingleton mUserSingleton;
+    private AuthAPI mAuthAPI;
+    private StorageAPI mStorageAPI;
     private FilesAdapter mFilesAdapter;
     private RecyclerView mFilesRV;
     private Boolean isFabOpen = false;
@@ -51,6 +65,8 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
         configExtendedFab(getApplicationContext());
 
+        mAuthAPI = AuthAPI.getInstance();
+        mStorageAPI = StorageAPI.getInstance();
 
         TextView tvEmpty = findViewById(R.id.tv_empty);
         TextView tvTitle = findViewById(R.id.tv_title);
@@ -149,9 +165,63 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
 
     @Override
     public void onLongClickListener(File file) {
-
+        new AlertDialog.Builder(this)
+                .setTitle("Delete File")
+                .setMessage("Do you want to delete "+ file.getName())
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        deleteFle(file);
+                        Intent intent = new Intent(getApplicationContext(), HomeActivity.class);
+                        startActivity(intent);
+                    }
+                }).setNegativeButton(getString(R.string.dialog_cancel_btn), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        }).create().show();
     }
 
+    private void deleteFle(File file) {
+        if ( mUserSingleton.getUser().getFiles().contains( file ) ) {
+           // int index = mUserSingleton.getUser().getFiles().indexOf(file);
+            mUserSingleton.getUser().getFiles().remove(file);
+            mFirestoreAPI.getUserByUid( mUserSingleton.getUser().getUid() ).set(mUserSingleton.getUser())
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                            Toast.makeText(getApplicationContext(), getString(R.string.firestore_success_deleted), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_aboutUs:
+                new AboutUsFragment().show(getSupportFragmentManager(), "");
+                break;
+            case R.id.menu_logout:
+                mAuthAPI.getFirebaseAuth().signOut();
+                mUserSingleton.reset();
+                Intent intent = new Intent(this, ScrollingActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch ( v.getId() ){
@@ -178,7 +248,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             fabGallery.setClickable(false);
             fabCamera.setClickable(false);
             isFabOpen = false;
-            Log.d("Raj", "close");
 
         } else {
 
@@ -188,7 +257,6 @@ public class HomeActivity extends AppCompatActivity implements OnItemClickListen
             fabGallery.setClickable(true);
             fabCamera.setClickable(true);
             isFabOpen = true;
-            Log.d("Raj","open");
 
         }
     }
