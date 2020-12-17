@@ -35,6 +35,49 @@
 
     <include layout="@layout/content_scrolling" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tvOffline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/common_offline"
+            android:textSize="22sp"
+            android:textColor="@color/primary_text_color"
+            android:textStyle="bold"
+            android:visibility="gone"/>
+        <TextView
+            android:id="@+id/tvTryAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/tvOffline"
+            android:layout_marginTop="20dp"
+            android:text="@string/common_try_again"
+            android:textColor="@color/accent_color"
+            app:layout_constraintStart_toStartOf="@id/tvOffline"
+            app:layout_constraintEnd_toEndOf="@id/tvOffline"
+            android:textStyle="italic"
+            android:textSize="22sp"
+            android:visibility="gone"
+            />
+        <ImageView
+            android:id="@+id/iv_offline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="100sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/tvOffline"
+            android:layout_marginBottom="60dp"
+            android:visibility="gone"
+            android:src="@drawable/offline"
+            />
 
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
